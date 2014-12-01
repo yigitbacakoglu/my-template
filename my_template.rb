@@ -1,6 +1,6 @@
 ##
 # Application Generator Template
-# Usage: rails new APP_NAME  -T -m https://raw.github.com/yigitbacakoglu/my-template/master/rails_template.rb
+# Usage: rails new APP_NAME  -T -m https://raw.github.com/yigitbacakoglu/my-template/master/my_template.rb
 #
 # If you are customizing this template, you can use any methods provided by Thor::Actions
 # http://rubydoc.info/github/wycats/thor/master/Thor/Actions
@@ -85,7 +85,7 @@ gsub_file 'app/models/user.rb', /:remember_me/, ':remember_me, :name'
 gsub_file 'config/initializers/devise.rb', /please-change-me-at-config-initializers-devise@example.com/, 'CHANGEME@example.com'
 
 # Omniauth settings
-if added_social rescue false
+if(added_social rescue false)
   
   line = "config.omniauth :github"
   gsub_file 'config/initializers/devise.rb', /(#{Regexp.escape(line)})/mi do |match|
