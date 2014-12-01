@@ -14,7 +14,7 @@
 gem 'devise', "3.2.2"
 gem 'capistrano'
 gem 'rvm-capistrano'
-group :development do
+gem_group :development do
   gem 'capistrano-local-precompile', require: false
 end
 gem "client_side_validations"
@@ -26,14 +26,14 @@ gem 'kaminari'
 gem "nested_form"
 gem 'newrelic_rpm'
 gem 'airbrake'
-group :development do
+gem_group :development do
   gem 'sqlite3'
 end
-group :production do
+gem_group :production do
   gem 'mysql2', "0.3.13"
   gem 'unicorn'
 end
-group :assets do
+gem_group :assets do
   gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 end
 
@@ -131,7 +131,7 @@ route "root :to => 'home#index'"
 
 # Mail Settings
 
-inject_into_file 'config/environment.rb', do <<-RUBY
+inject_into_file 'config/environment.rb' do <<-RUBY
   #Mail Settings
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.delivery_method = :smtp
