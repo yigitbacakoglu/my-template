@@ -34,7 +34,9 @@ gem_group :production do
   gem 'unicorn'
 end
 gem_group :assets do
-  gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+  gem "therubyracer"
+  gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+  gem "twitter-bootstrap-rails"
 end
 
 
@@ -146,6 +148,20 @@ inject_into_file 'config/environment.rb' do <<-RUBY
   }
 RUBY
 end
+
+generate "rails g model Authentication uid:string provider:string oauth_token:string oauth_token_secret:string user_id:integer"
+
+gsub_file 'app/models/authentication.rb', /ActiveRecord::Base/ do <<-RUBY
+  attr_accessible :oauth_token, :oauth_token_secret, :provider, :uid, :user_id
+  belongs_to :user
+RUBY
+end
+
+gsub_file 'app/models/user.rb', /ActiveRecord::Base/ do <<-RUBY
+  has_many :authentications
+RUBY
+end
+
 
 rake 'db:migrate'
 
