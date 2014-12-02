@@ -114,7 +114,7 @@ generate 'client_side_validations:install'
 
 # Twitter bootstrap
 generate 'bootstrap:install --no-coffeescript'
-generate 'bootstrap:layout application -f'
+#generate 'bootstrap:layout application -f'
 
 
 # Welcome and Dashboard
@@ -210,12 +210,6 @@ get @path + 'app/views/shared/_interactive_address_fields.html.erb', 'app/views/
 get @path + 'app/views/layouts/_default_modal.html.erb', 'app/views/layouts/_default_modal.html.erb'
 
 
-inject_into_file 'app/views/layouts/application.html.erb', :before => '</body>' do
-  <<-RUBY
-    <%= render partial: "layouts/default_modal" %>
-  RUBY
-end
-
 if (stripe rescue false)
 
   generate :model, "subscription plan_id:integer user_id:integer starts_at:datetime ends_at:datetime paid_amount:decimal state:string email:string stripe_subscription_id:string stripe_customer_token:string paypal_customer_token:string paypal_recurring_profile_token:string token:string deleted_at:datetime "
@@ -265,6 +259,56 @@ if (stripe rescue false)
 
 
 end
+
+
+inject_into_file 'app/assets/javascripts/application.js', :before => '//= require jquery_nested_form' do
+  <<-RUBY
+      //= require jquery_nested_form
+  RUBY
+end
+
+
+inject_into_file 'config/environments/production.rb', :before => 'end' do
+  <<-RUBY
+  config.assets.initialize_on_precompile = false
+  config.assets.precompile += ['vendor/assets/**/*']
+  config.assets.precompile = []
+  config.assets.precompile << Proc.new { |path|
+    begin
+      if !(path =~ /\.(html)\z/) #compile all non-html files
+        full_path = Rails.application.assets.resolve(path).to_path
+        app_assets_path = Rails.root.join('app', 'assets').to_path
+        vendor_assets_path = Rails.root.join('vendor', 'assets').to_path
+        lib_assets_path = Rails.root.join('lib', 'assets').to_path
+
+        if !config.assets.precompile.include?(full_path) && (!path.starts_with? '_')
+          puts "\t" + full_path.slice(Rails.root.to_path.size..-1)
+          true
+        else
+          false
+        end
+      else
+        false
+      end
+    rescue
+      next
+    end
+  }
+
+
+
+  RUBY
+end
+
+
+remove_file "app/views/layouts/application.html.erb"
+get @path + 'app/views/layouts/application.html.erb', 'app/views/layouts/application.html.erb'
+
+
+remove_file "config/initializers/client_side_validations.rb"
+get @path + 'config/initializers/client_side_validations.rb', 'config/initializers/client_side_validations.rb'
+
+
 
 
 rake 'db:migrate'

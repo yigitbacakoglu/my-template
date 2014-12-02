@@ -1,0 +1,28 @@
+.marR10 {
+    margin-right: 10px !important;
+}
+
+.marT10 {
+    margin-top: 10px !important;
+}
+
+.marT1 {
+    margin-top: 1px !important;
+}
+
+.align-left {
+    text-align: left !important;
+}
+
+.date-select select {
+    width: 99px;
+}
+
+.table.no-border td {
+    border: none !important;
+}
+@media print {
+    a[href]:after {
+        content: "" !important;
+    }
+}
