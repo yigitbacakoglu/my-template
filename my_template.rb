@@ -197,6 +197,7 @@ route "resources :authentications, :only => :destroy"
 
 
 get @path + 'app/controllers/dashboard/base_controller.rb', 'app/controllers/dashboard/base_controller.rb'
+get @path + 'app/controllers/base_controller.rb', 'app/controllers/base_controller.rb'
 get @path + 'app/controllers/dashboard/overview_controller.rb', 'app/controllers/dashboard/overview_controller.rb'
 get @path + 'app/views/dashboard/overview/index.html.erb', 'app/views/dashboard/overview/index.html.erb'
 
