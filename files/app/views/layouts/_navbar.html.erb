@@ -1,0 +1,34 @@
+<div class="navbar navbar-fluid-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar hidden-print" data-target=".nav-collapse" data-toggle="collapse" style="margin-top: 12px;">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="/">
+        <img src="<%#= asset_path("logo.png") %>" alt=""/>
+      </a>
+
+      <div class="container-fluid nav-collapse">
+        <ul class="nav pull-right" style="margin-top: 8px;">
+          <% if @current_user.blank? %>
+              <li><%= link_to "Login", new_user_session_path %></li>
+              <li><%= link_to "Signup", new_user_registration_path %></li>
+          <% else %>
+              <li><%= link_to "Example link", "/" %></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown
+                  <i class="icon icon-chevron-down"></i> </a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "Child#1", "#" %></li>
+                  <li><%= link_to "Child#1", "#" %></li>
+                </ul>
+              </li>
+          <% end %>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </div>
+</div>

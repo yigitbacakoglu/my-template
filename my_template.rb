@@ -208,6 +208,11 @@ get @path + 'app/views/shared/_errors.html.erb', 'app/views/shared/_errors.html.
 get @path + 'app/views/shared/_flashes.js.erb', 'app/views/shared/_flashes.js.erb'
 get @path + 'app/views/shared/_interactive_address_fields.html.erb', 'app/views/shared/_interactive_address_fields.html.erb'
 get @path + 'app/views/layouts/_default_modal.html.erb', 'app/views/layouts/_default_modal.html.erb'
+get @path + 'app/views/layouts/_navbar.html.erb', 'app/views/layouts/_navbar.html.erb'
+
+
+get @path + 'app/assets/images/default-avatar.gif', 'app/assets/images/default-avatar.gif'
+get @path + 'app/assets/images/missing.png', 'app/assets/images/missing.png'
 
 
 if (stripe rescue false)
@@ -300,6 +305,9 @@ inject_into_file 'config/environments/production.rb', :before => 'end' do
   RUBY
 end
 
+
+remove_file "app/views/layouts/application.html.erb"
+get @path + 'app/views/layouts/application.html.erb', 'app/views/layouts/application.html.erb'
 
 remove_file "app/views/layouts/application.html.erb"
 get @path + 'app/views/layouts/application.html.erb', 'app/views/layouts/application.html.erb'
