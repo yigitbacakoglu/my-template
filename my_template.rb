@@ -133,7 +133,7 @@ route "root :to => 'home#index'"
 
 # Mail Settings
 
-inject_into_file 'config/environment.rb' do <<-RUBY
+append_file 'config/environment.rb' do <<-RUBY
   #Mail Settings
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.delivery_method = :smtp
