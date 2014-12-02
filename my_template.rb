@@ -89,7 +89,7 @@ gsub_file 'config/initializers/devise.rb', /please-change-me-at-config-initializ
 # Omniauth settings
 if(added_social rescue false)
   
-  line = "config.omniauth :github"
+  line = "==> OmniAuth"
   gsub_file 'config/initializers/devise.rb', /(#{Regexp.escape(line)})/mi do |match|
     "#{match}\n  
     config.omniauth :facebook, 'CHANGEME', 'CHANGEMECHANGEME', :scope => 'email,publish_stream'\n
