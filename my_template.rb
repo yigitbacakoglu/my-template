@@ -76,7 +76,7 @@ rake 'db:drop'
 rake 'db:create'
 rake 'db:migrate'
 
- Devise
+#Devise
 generate 'devise:install'
 generate 'devise:views'
 
