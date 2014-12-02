@@ -105,7 +105,7 @@ if(added_social rescue false)
   end
   
   inside 'app/controllers/users' do  
-    get @path + 'app/controllers/users/omniauth_callbacks_controller.rb', 'app/controllers/users/omniauth_callbacks_controller.rb'
+    get @path + 'app/controllers/users/omniauth_callbacks_controller.rb', 'omniauth_callbacks_controller.rb'
   end
   
 end
