@@ -1,0 +1,18 @@
+<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 id="default-modal-header">.</h4>
+      </div>
+      <div id="dynamic-content">
+        <div id="default-modal-body" class="modal-body">
+          <p class='loading'><%= t(:loading) %></p>
+        </div>
+        <div id="default-modal-footer" class="modal-footer">
+          <%= link_to t(:close), "#", "data-dismiss" => "modal", :class => "btn", "aria-hidden" => true %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

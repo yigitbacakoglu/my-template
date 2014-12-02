@@ -1,0 +1,18 @@
+<% if target && target.errors.any? %>
+<% target.errors.full_messages.each do |msg| %>
+
+error_div = '<div class="width-form-full">' +
+        '<div class="alert alert-danger">' +
+        '<i class="icon-remove-sign"></i>' +
+        '<%= msg %>' +
+        '</div>' +
+        '</div>'
+
+$('.error_container').after(error_div);
+
+<% end %>
+<% end %>
+
+
+
+

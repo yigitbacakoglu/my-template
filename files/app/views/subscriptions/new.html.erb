@@ -1,0 +1,167 @@
+<%= content_for :head do %>
+    <%= stylesheet_link_tag "/assets/main/woocommerce-ver=2.1.7" %>
+    <%= javascript_include_tag "//js.stripe.com/v1/", "stripe/subscriptions" %>
+<% end %>
+
+
+<header class="page-header">
+  <h1 class="page-title">Signing up for "<%= @subscription.plan.name %>"</h1>
+
+  <h2>
+    <small>
+      for only <strong><%= number_to_currency @subscription.plan.price ,unit: "£" %></strong> per <%= @subscription.plan.period %>!
+    </small>
+  </h2>
+</header>
+
+<div id="content" class="container" role="main">
+  <div id="flash-container">
+    <%= bootstrap_flash %>
+  </div>
+
+  <article id="post-2052" class="post-2052 page type-page status-publish hentry">
+    <div class="entry-content">
+      <div class="woocommerce">
+
+        <%= form_for @subscription, html: {class: "checkout"} do |f| %>
+
+
+            <div id="order_review">
+
+              <% if @subscription.errors.any? %>
+                  <div class="error_messages">
+                    <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this subscription from being
+                      saved:</h2>
+                    <ul>
+                      <% @subscription.errors.full_messages.each do |msg| %>
+                          <li><%= msg %></li>
+                      <% end %>
+                    </ul>
+                  </div>
+              <% end %>
+
+              <%= f.hidden_field :plan_id %>
+              <%= f.hidden_field :stripe_card_token %>
+              <%= f.hidden_field :paypal_customer_token %>
+              <%= f.hidden_field :paypal_payment_token %>
+
+
+
+
+
+
+              <div id="payment">
+                <ul class="payment_methods methods">
+                  <li class="payment_method_bacs">
+
+                    <%= radio_button_tag :pay_with, :card, true, class: "input-radio" %>
+                    <%= label_tag :pay_with_card do %>
+                        <%= image_tag "visa.png" %>
+                        <%= image_tag "mastercard.png" %>
+                        <%= image_tag "discover.png" %>
+                        <%= image_tag "american_express.png" %>
+                        <%= image_tag "jcb.png" %>
+                    <% end %>
+
+                    <div class="payment_box" id="billing_fields">
+                      <% if @subscription.payment_provided? %>
+                          Payment has been provided. Click "Subscribe" to complete the subscription.
+                      <% else %>
+
+                          <div class="row">
+                            <div class="col-xs-6 col-md-4">
+                              <%= label_tag :card_number, "Credit Card Number" %>
+                              <%= text_field_tag :card_number, nil, name: nil %>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-xs-6 col-md-4">
+                              <%= label_tag :card_month, "Card Expiration" %>
+                              <%= select_month nil, {add_month_numbers: true}, {name: nil, id: "card_month"} %>
+                            </div>
+                            <div class="col-xs-6 col-md-4">
+                              <%= label_tag :card_month, "&nbsp;".html_safe %>
+                              <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year"} %>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-xs-6 col-md-4">
+                              <%= label_tag :card_code, "Security Code on Card (CVV)" %>
+                              <%= text_field_tag :card_code, nil, name: nil %>
+                            </div>
+                          </div>
+                      <% end %>
+                      <div id="stripe_error">
+                        <noscript>JavaScript is not enabled and is required for this form. First enable it in your web
+                          browser
+                          settings.
+                        </noscript>
+                      </div>
+                      <div class="actions">
+                        <%= f.submit "Subscribe", class: "button-secondary button-small marT5" %>
+                      </div>
+                    </div>
+
+                  </li>
+
+
+                  <li class="payment_method_cheque">
+
+                    <%= radio_button_tag :pay_with, :paypal, false, class: "input-radio" %>
+                    <%= label_tag :pay_with_paypal do %>
+                        <%= image_tag "paypal.png" %>
+                    <% end %>
+
+
+
+                    <div class="payment_box" id="paypal_checkout" style="display:none">
+                      <%= link_to image_tag("https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"), paypal_checkout_path(plan_id: @subscription.plan_id) %>
+                    </div>
+                  </li>
+
+                </ul>
+
+                <!--<div class="form-row place-order">-->
+
+
+                <!--<input type="submit" class="button alt" name="woocommerce_checkout_place_order" id="place_order" value="Place order" data-value="Place order"/>-->
+
+                <!--<p class="form-row terms">-->
+                <!--<label for="terms" class="checkbox">I&rsquo;ve read and accept the-->
+                <!--<a href="http://demo.astoundify.com/jobify-darker/terms-and-conditions/" target="_blank">terms &amp;-->
+                <!--conditions</a></label>-->
+                <!--<input type="checkbox" class="input-checkbox" name="terms" id="terms"/>-->
+                <!--</p>-->
+
+
+                <!--</div>-->
+
+                <div class="clear"></div>
+
+              </div>
+
+
+            </div>
+
+        <% end %>
+
+      </div>
+    </div>
+  </article>
+  <!-- #post -->
+</div>
+
+<style>
+    select {
+        -webkit-appearance: menulist;
+        -moz-appearance: menulist;
+        appearance: menulist;
+        height: 40px;
+    }
+
+    .select {
+        width: 33%;
+    }
+</style>

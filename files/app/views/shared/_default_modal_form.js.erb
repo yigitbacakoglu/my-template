@@ -1,0 +1,30 @@
+$('#defaultModal .modal-footer').remove();
+$('#defaultModal .modal-body').remove();
+$('#defaultModal form').remove();
+$('#dynamic-content').html('<%= escape_javascript(render :template => "#{target}", :formats => [:html], :handlers => [:erb]) %>'); //this contains both footer and body
+$('#defaultModal .modal-header h4').text('<%= @title %>'); // don't need a footer here
+<% if !options[:class].blank? %>
+$('#defaultModal').addClass('<%= options[:class] %>');
+<% end %>
+$('#defaultModal .modal-dialog').removeClass().addClass('modal-dialog');
+<% if !options[:dialog_class].blank? %>
+$('#defaultModal .modal-dialog').addClass('<%= options[:dialog_class] %>');
+<% end %>
+$('#defaultModal').modal('show');
+
+
+
+setTimeout(function () {
+    try {
+        $('form[data-validate]').enableClientSideValidations();
+    } catch (err) {
+    }
+}, 500);
+
+
+setTimeout(function () {
+    try {
+        run_controller_initializers();
+    } catch (err) {
+    }
+}, 300);

@@ -1,0 +1,47 @@
+<header class="page-header">
+  <h1 class="page-title">Plans &amp; Pricing</h1>
+</header>
+<div id="content" class="container" role="main">
+  <div class="page-content">
+  </div>
+
+  <div id="flash-container">
+    <%= bootstrap_flash %>
+  </div>
+
+  <section id="%1$s" class="homepage-widget %2$s">
+    <div class="container">
+
+
+      <div class="pricing-table-widget-3">
+
+        <% @plans.each do |plan| %>
+            <div class="pricing-table-widget woocommerce">
+              <div class="pricing-table-widget-title">
+                <%= plan.name %>
+              </div>
+
+              <div class="pricing-table-widget-description">
+                <h2><span class="amount"><%= number_to_currency plan.price, :precision => 0, :unit => "£" %></span></h2>
+
+                <p>
+              <span class="rcp_level_duration">
+				per <%= plan.period %>
+              </span>
+                </p>
+                <%= plan.description.to_s.html_safe %>
+                <p>
+                  <%= link_to "Sign up", new_subscription_path(:plan_id => plan.id), class: "button-secondary" %>
+                </p>
+              </div>
+            </div>
+        <% end %>
+
+
+      </div>
+
+    </div>
+
+  </section>
+</div>
+

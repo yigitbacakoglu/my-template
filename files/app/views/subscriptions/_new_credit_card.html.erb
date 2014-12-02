@@ -1,0 +1,54 @@
+<%= content_for :head do %>
+    <%= javascript_include_tag "//js.stripe.com/v1/", "stripe/subscriptions" %>
+<% end %>
+
+
+<p>You need to update your credit card.</p>
+<div class='subscribe_payment'>
+  <%= form_for(@subscription, :url => add_card_subscription_path("my"), :method => :post, :html => {id: "new_subscription"}) do |f| %>
+      <%= f.hidden_field :stripe_card_token %>
+
+      <div class="row">
+        <div class="col-xs-6 col-md-4">
+          <%= label_tag :card_number, "Credit Card Number" %>
+          <%= text_field_tag :card_number, nil, name: nil %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-6 col-md-4">
+          <%= label_tag :card_month, "Card Expiration" %>
+          <%= select_month nil, {add_month_numbers: true}, {name: nil, id: "card_month"} %>
+        </div>
+        <div class="col-xs-6 col-md-4">
+          <%= label_tag :card_month, "&nbsp;".html_safe %>
+          <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year"} %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-6 col-md-4">
+          <%= label_tag :card_code, "Security Code on Card (CVV)" %>
+          <%= text_field_tag :card_code, nil, name: nil %>
+        </div>
+      </div>
+
+      <div id="stripe_error">
+        <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser
+          settings.
+        </noscript>
+      </div>
+      <div class="actions">
+        <%= f.submit "Update my card", class: "button-secondary button-small marT5" %>
+      </div>
+  <% end %>
+</div>
+
+<style>
+    select {
+        -webkit-appearance: menulist;
+        -moz-appearance: menulist;
+        appearance: menulist;
+        height: 40px;
+    }
+</style>

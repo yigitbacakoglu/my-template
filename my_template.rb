@@ -8,9 +8,9 @@
 # http://github.com/rails/rails/blob/master/railties/lib/rails/generators/actions.rb
 
 @path = 'https://raw.github.com/yigitbacakoglu/my-template/master/files/'
+stripe = true
+##### RECEIPES #####
 
- ##### RECEIPES #####
- 
 gem 'devise', "3.2.2"
 gem 'capistrano'
 gem 'rvm-capistrano'
@@ -51,13 +51,11 @@ if yes?('Would you like to use delayed job for background job? (yes/no)')
 end
 
 
-
 if yes?('Would you like to use stripe billing? (yes/no)')
   gem 'stripe'
   gem 'stripe-rails'
   say('Add this code where you will use stripe modal.  <%= javascript_include_tag "//js.stripe.com/v1/", "stripe/subscriptions" %>')
 end
-
 
 
 if yes?('Would you like to use social login (facebook, twitter, google+, linkedin) ? (yes/no)')
@@ -87,8 +85,8 @@ gsub_file 'app/models/user.rb', /:remember_me/, ':remember_me, :name'
 gsub_file 'config/initializers/devise.rb', /please-change-me-at-config-initializers-devise@example.com/, 'CHANGEME@example.com'
 
 # Omniauth settings
-if(added_social rescue false)
-  
+if (added_social rescue false)
+
   line = "==> OmniAuth"
   gsub_file 'config/initializers/devise.rb', /(#{Regexp.escape(line)})/mi do |match|
     "#{match}\n  
@@ -97,17 +95,18 @@ if(added_social rescue false)
     config.omniauth :linkedin, 'CHANGEME', 'CHANGEMECHANGEME'\n
     config.omniauth :twitter, 'CHANGEME', 'CHANGEMECHANGEME'\n
     "
-  end  
-  
-  gsub_file 'config/routes.rb', /  devise_for :users/ do <<-RUBY
-    devise_for :users, :controllers => {:omniauth_callbacks => "users/omniauth_callbacks"}
-  RUBY
   end
-  
-  inside 'app/controllers/users' do  
+
+  gsub_file 'config/routes.rb', /  devise_for :users/ do
+    <<-RUBY
+    devise_for :users, :controllers => {:omniauth_callbacks => "users/omniauth_callbacks"}
+    RUBY
+  end
+
+  inside 'app/controllers/users' do
     get @path + 'app/controllers/users/omniauth_callbacks_controller.rb', 'omniauth_callbacks_controller.rb'
   end
-  
+
 end
 
 # Client Side
@@ -122,18 +121,47 @@ generate 'bootstrap:layout application -f'
 generate(:controller, 'home')
 get @path + 'app/views/home/index.html.erb', 'app/views/home/index.html.erb'
 
-inject_into_file 'app/controllers/home_controller.rb', :before => 'end' do <<-RUBY
+inject_into_file 'app/controllers/home_controller.rb', :before => 'end' do
+  <<-RUBY
   skip_before_filter :authenticate_user!, :only => :index
   def index
   end
-RUBY
+  RUBY
+end
+
+inject_into_file 'app/controllers/application_controller.rb', :before => 'end' do
+  <<-RUBY
+  def render_default_modal_form(title = nil, target = nil, options = {})
+    @title = title
+    target ||= \"\#{params[:controller]}/\#{params[:action]}\"
+    render :partial => '/shared/default_modal_form', :locals => {:target => target, :options => options}
+  end
+  RUBY
 end
 
 route "root :to => 'home#index'"
+route "get '/dashboard' => 'dashboard/orders#index', :as => :dashboard"
+
+generate :model, "asset attachment:attachment user_id:integer type:string viewable_id:integer viewable_type:string"
+
+inject_into_file 'app/models/asset.rb', :before => 'end' do
+  <<-RUBY
+    \n belongs_to :user     \n
+    belongs_to :viewable, :polymorphic => true \n
+                            \n
+    def self.not_deleted   \n
+      where(:deleted_at => nil)  \n
+    end              \n
+  RUBY
+end
+
+
+get @path + 'app/models/avatar.rb', 'app/models/avatar.rb'
 
 # Mail Settings
 
-append_file 'config/environment.rb' do <<-RUBY
+append_file 'config/environment.rb' do
+  <<-RUBY
   #Mail Settings
   ActionMailer::Base.default_url_options = { :host => 'localhost:3000' }
   ActionMailer::Base.delivery_method = :smtp
@@ -146,27 +174,98 @@ append_file 'config/environment.rb' do <<-RUBY
       :authentication       => 'plain',
       :enable_starttls_auto => true
   }
-RUBY
+  RUBY
 end
 
 generate :model, "Authentication uid:string provider:string oauth_token:string oauth_token_secret:string user_id:integer"
 line = "ActiveRecord::Base"
 
 gsub_file 'app/models/authentication.rb', /(#{Regexp.escape(line)})/mi do |match|
-    "#{match}\n  
+  "#{match}\n
     belongs_to :user"
 end
 
 gsub_file 'app/models/user.rb', /(#{Regexp.escape(line)})/mi do |match|
-    "#{match}\n  
-     has_many :authentications"
+  "#{match}\n
+     has_many :authentications\n"
+end
+
+gsub_file 'app/models/user.rb', /:registerable/, ":registerable, :omniauthable"
+
+get @path + 'app/controllers/authentications_controller.rb', 'app/controllers/authentications_controller.rb'
+route "resources :authentications, :only => :destroy"
+
+
+get @path + 'app/controllers/dashboard/base_controller.rb', 'app/controllers/dashboard/base_controller.rb'
+get @path + 'app/controllers/dashboard/overview_controller.rb', 'app/controllers/dashboard/overview_controller.rb'
+get @path + 'app/views/dashboard/overview/index.html.erb', 'app/views/dashboard/overview/index.html.erb'
+
+
+get @path + 'app/views/shared/_default_modal_form.js.erb', 'app/views/shared/_default_modal_form.js.erb'
+get @path + 'app/views/shared/_errors.js.erb', 'app/views/shared/_errors.js.erb'
+get @path + 'app/views/shared/_errors.html.erb', 'app/views/shared/_errors.html.erb'
+get @path + 'app/views/shared/_flashes.js.erb', 'app/views/shared/_flashes.js.erb'
+get @path + 'app/views/shared/_interactive_address_fields.html.erb', 'app/views/shared/_interactive_address_fields.html.erb'
+get @path + 'app/views/layouts/_default_modal.html.erb', 'app/views/layouts/_default_modal.html.erb'
+
+
+inject_into_file 'app/views/application.html.erb', :before => '</body>' do
+  <<-RUBY
+    <%= render partial: "layouts/default_modal" %>
+  RUBY
+end
+
+if (stripe rescue false)
+
+  generate :model, "subscription plan_id:integer user_id:integer starts_at:datetime ends_at:datetime paid_amount:decimal state:string email:string stripe_subscription_id:string stripe_customer_token:string paypal_customer_token:string paypal_recurring_profile_token:string token:string deleted_at:datetime "
+  generate :model, "subscription_invoice invoice_id:string subscription_id:integer provider:string extra:text paid:boolean closed:boolean"
+  generate :model, "plan name:string description:text price:decimal period:string trial_period:string trial_period_count:string deleted_at:datetime"
+
+  remove_file 'app/models/plan.rb'
+  remove_file 'app/models/subscription.rb'
+  remove_file 'app/models/subscription_invoice.rb'
+
+  get @path + 'app/models/plan.rb', 'app/models/plan.rb'
+  get @path + 'app/models/subscription.rb', 'app/models/subscription.rb'
+  get @path + 'app/models/subscription_invoice.rb', 'app/models/subscription_invoice.rb'
+
+
+  get @path + 'app/views/plans/index.html.erb', 'app/views/plans/index.html.erb'
+  get @path + 'app/views/subscriptions/_new_credit_card.html.erb', 'app/views/subscriptions/_new_credit_card.html.erb'
+  get @path + 'app/views/subscriptions/new.html.erb', 'app/views/subscriptions/new.html.erb'
+  get @path + 'app/views/subscriptions/show.html.erb', 'app/views/subscriptions/show.html.erb'
+
+
+  get @path + 'app/views/subscription_mailer/_detail_table.html.erb', 'app/views/subscription_mailer/_detail_table.html.erb'
+  get @path + 'app/views/subscription_mailer/activated_to_admin.html.erb', 'app/views/subscription_mailer/activated_to_admin.html.erb'
+  get @path + 'app/views/subscription_mailer/activated_to_customer.html.erb', 'app/views/subscription_mailer/activated_to_customer.html.erb'
+  get @path + 'app/views/subscription_mailer/deactivated_to_admin.html.erb', 'app/views/subscription_mailer/deactivated_to_admin.html.erb'
+  get @path + 'app/views/subscription_mailer/deactivated_to_customer.html.erb', 'app/views/subscription_mailer/deactivated_to_customer.html.erb'
+  get @path + 'app/views/subscription_mailer/invoice_created.html.erb', 'app/views/subscription_mailer/invoice_created.html.erb'
+  get @path + 'app/views/subscription_mailer/trial_will_end.html.erb', 'app/views/subscription_mailer/trial_will_end.html.erb'
+
+  get @path + 'app/helpers/base_helper.rb', 'app/helpers/base_helper.rb'
+
+  route "resources :subscriptions do
+    member do
+      delete :remove_card
+      get :add_card
+      post :add_card
+      put :fire
+    end
+  end
+  resources :plans
+"
+
+
 end
 
 
 rake 'db:migrate'
 
 # Git
-append_file '.gitignore' do <<-GIT
+append_file '.gitignore' do
+  <<-GIT
 /public/system
 /public/uploads
 /coverage
@@ -193,9 +292,9 @@ nbproject/**/*
 nbproject
 .idea
 .idea/**/*
-GIT
+  GIT
 end
-
+remove_file "public/index.html"
 git :init
 git :add => '.'
 git :commit => '-m "close #1 Install Rails "'

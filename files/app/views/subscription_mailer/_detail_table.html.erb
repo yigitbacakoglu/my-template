@@ -1,0 +1,22 @@
+<table>
+  <tr>
+    <td>Username</td>
+    <td><%= @user.name %></td>
+  </tr>
+  <tr>
+    <td>Email</td>
+    <td><%= @user.email %></td>
+  </tr>
+  <tr>
+    <td>Company</td>
+    <td><%= @user.profile.try(:company) %></td>
+  </tr>
+  <tr>
+    <td>Plan</td>
+    <td><%= @subscription.plan.try(:name) %></td>
+  </tr>
+  <tr>
+    <td>Amount</td>
+    <td><%= number_to_currency @subscription.paid_amount, unit: "£" %>per <%= @subscription.plan.try(:period) %></td>
+  </tr>
+</table>

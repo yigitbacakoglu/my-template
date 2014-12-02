@@ -1,0 +1,23 @@
+<div class="error_container">
+  <% if target && target.errors.any? %>
+      <div class="width-form-full">
+        <div class="alert alert-danger">
+          <i class="icon-remove-sign"></i>
+          <span style="position: relative; top:-7px;"><%= t(:there_were_problems_with_the_following_fields, :default => "There were problems with the following fields") %>  </span>
+          <%= content_tag(:button, raw("&times;"), :class => "close", "data-dismiss" => "alert") %>
+          <hr style="margin:0 0 10px;">
+          <ul>
+            <% target.errors.full_messages.each do |msg| %>
+                <li>
+                  <%= msg %>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+  <% end %>
+</div>
+
+
+
+

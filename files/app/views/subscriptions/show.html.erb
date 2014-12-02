@@ -1,0 +1,56 @@
+<header class="page-header">
+  <h1 class="page-title">Your Subscription
+    <small><%= @subscription.plan.try(:name) %></small>
+  </h1>
+
+  <h2 class="page-subtitle">
+    <ul>
+      <li class="location">
+
+        <span class="badge candidate-location"><%= t @subscription.state %></span>
+        <% if @subscription.active? %>
+            <%= link_to "Cancel", fire_subscription_path(e: "cancel"), method: :put, confirm: "Are you sure?" %>
+        <% elsif  @subscription.deactivated? %>
+            <%= link_to "Activate", fire_subscription_path(e: "activate"), method: :put, confirm: "Are you sure?" %>
+        <% end %>
+      </li>
+    </ul>
+  </h2>
+
+</header>
+<div id="content" class="container">
+  <div id="flash-container">
+    <%= bootstrap_flash %>
+  </div>
+  <%= render partial: "shared/errors", :locals => {:target => @subscription} %>
+
+
+  <p>Payment Service: <b><%= @subscription.payment_provider.titleize %></b></p>
+
+  <% if @subscription.card_supported? %>
+      <% if @subscription.card_info.blank? %>
+          <%= render partial: "new_credit_card" %>
+      <% else %>
+          <table>
+            <thead>
+            <tr>
+              <th colspan="5">Cards</th>
+              <!--<th colspan="4"><%= link_to "Add Card", add_card_subscription_path("my") %></th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><%= @subscription.card_info[:card_type] %></td>
+              <td><%= "****#{@subscription.card_info[:last_four]}" %></td>
+              <td><%= @subscription.card_info[:exp_month] %></td>
+              <td><%= @subscription.card_info[:exp_year] %></td>
+              <td><%= link_to "Remove", remove_card_subscription_path("my"), method: "delete", confirm: "Are you sure?" %></td>
+            </tr>
+            </tbody>
+          </table>
+      <% end %>
+  <% end %>
+
+</div>
+
+
