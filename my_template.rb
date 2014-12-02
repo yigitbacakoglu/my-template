@@ -149,12 +149,11 @@ append_file 'config/environment.rb' do <<-RUBY
 RUBY
 end
 
-generate "rails g model Authentication uid:string provider:string oauth_token:string oauth_token_secret:string user_id:integer"
+generate :model, "Authentication uid:string provider:string oauth_token:string oauth_token_secret:string user_id:integer"
 line = "ActiveRecord::Base"
 
 gsub_file 'app/models/authentication.rb', /(#{Regexp.escape(line)})/mi do |match|
     "#{match}\n  
-    attr_accessible :oauth_token, :oauth_token_secret, :provider, :uid, :user_id \n  
     belongs_to :user"
 end
 
