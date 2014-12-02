@@ -2,37 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1c9c75c-21fb-4287-8687-dc81fc9a03a4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/layouts/_default_modal.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/shared/_default_modal_form.js.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/subscription_mailer/_detail_table.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/shared/_errors.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/shared/_errors.js.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/shared/_flashes.js.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/shared/_interactive_address_fields.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/subscriptions/_new_credit_card.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/subscription_mailer/activated_to_admin.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/subscription_mailer/activated_to_customer.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/models/asset.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/controllers/authentications_controller.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/models/avatar.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/controllers/dashboard/base_controller.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/helpers/base_helper.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/subscription_mailer/deactivated_to_admin.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/subscription_mailer/deactivated_to_customer.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/dashboard/overview/index.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/plans/index.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/subscription_mailer/invoice_created.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/subscriptions/new.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/controllers/dashboard/overview_controller.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/models/plan.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/controllers/plans_controller.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/subscriptions/show.html.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/models/subscription.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/models/subscription_invoice.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/mailers/subscription_mailer.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/controllers/subscriptions_controller.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/files/app/views/subscription_mailer/trial_will_end.html.erb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/my_template.rb" afterPath="$PROJECT_DIR$/my_template.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="my-template.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -67,7 +38,7 @@
       <file leaf-file-name="my_template.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/my_template.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="146" column="0" selection-start="4251" selection-end="4534" vertical-scroll-proportion="0.346395" vertical-offset="1748" max-vertical-offset="4710">
+            <state line="251" column="47" selection-start="9503" selection-end="9503" vertical-scroll-proportion="0.4992163" vertical-offset="3128" max-vertical-offset="4785">
               <folding />
             </state>
           </provider>
@@ -258,6 +229,50 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mailers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="my-template" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="my-template" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="files" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="my-template" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="my-template" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="files" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controllers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -588,7 +603,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/my_template.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="146" column="0" selection-start="4251" selection-end="4534" vertical-scroll-proportion="0.346395" vertical-offset="1748" max-vertical-offset="4710">
+        <state line="251" column="47" selection-start="9503" selection-end="9503" vertical-scroll-proportion="0.4992163" vertical-offset="3128" max-vertical-offset="4785">
           <folding />
         </state>
       </provider>

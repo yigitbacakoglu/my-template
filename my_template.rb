@@ -209,7 +209,7 @@ get @path + 'app/views/shared/_interactive_address_fields.html.erb', 'app/views/
 get @path + 'app/views/layouts/_default_modal.html.erb', 'app/views/layouts/_default_modal.html.erb'
 
 
-inject_into_file 'app/views/application.html.erb', :before => '</body>' do
+inject_into_file 'app/views/layouts/application.html.erb', :before => '</body>' do
   <<-RUBY
     <%= render partial: "layouts/default_modal" %>
   RUBY
@@ -245,6 +245,11 @@ if (stripe rescue false)
   get @path + 'app/views/subscription_mailer/trial_will_end.html.erb', 'app/views/subscription_mailer/trial_will_end.html.erb'
 
   get @path + 'app/helpers/base_helper.rb', 'app/helpers/base_helper.rb'
+
+
+  get @path + 'app/mailers/subscription_mailer.rb', 'app/mailers/subscription_mailer.rb'
+  get @path + 'app/controllers/subscriptions_controller.rb', 'app/controllers/subscriptions_controller.rb'
+  get @path + 'app/controllers/plans_controller.rb', 'app/controllers/plans_controller.rb'
 
   route "resources :subscriptions do
     member do
