@@ -20,7 +20,7 @@ end
 gem "client_side_validations"
 gem "rails-settings-cached", "0.2.4"
 gem 'state_machine'
-gem 'paperclip'
+gem "paperclip", "3.4.2"
 gem "ransack" # Last officially released gem (Rails 3 and 4)
 gem 'kaminari'
 gem "nested_form"
@@ -38,6 +38,8 @@ gem_group :assets do
   gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
   gem "twitter-bootstrap-rails"
 end
+gem 'rails_admin'
+gem 'haml', '>= 3.1.alpha.214'
 
 
 ####### OPTIONAL #########
@@ -48,6 +50,7 @@ if yes?('Would you like to use delayed job for background job? (yes/no)')
   gem 'delayed_job_active_record'
   gem "daemons"
   gem 'dj_mon'
+  dj_added = true
 end
 
 
@@ -73,6 +76,9 @@ run 'bundle install'
 rake 'db:drop'
 rake 'db:create'
 rake 'db:migrate'
+
+#Rails admin
+generate "rails_admin:install"
 
 #Devise
 generate 'devise:install'
@@ -131,6 +137,13 @@ end
 
 inject_into_file 'app/controllers/application_controller.rb', :before => 'end' do
   <<-RUBY
+  before_filter :set_current_user
+  
+  def set_current_user
+    @current_user = current_user
+    User.current = @current_user
+  end
+  
   def render_default_modal_form(title = nil, target = nil, options = {})
     @title = title
     target ||= \"\#{params[:controller]}/\#{params[:action]}\"
@@ -140,7 +153,7 @@ inject_into_file 'app/controllers/application_controller.rb', :before => 'end' d
 end
 
 route "root :to => 'home#index'"
-route "get '/dashboard' => 'dashboard/orders#index', :as => :dashboard"
+route "get '/dashboard' => 'dashboard/overview#index', :as => :dashboard"
 
 generate :model, "asset attachment:attachment user_id:integer type:string viewable_id:integer viewable_type:string"
 
@@ -187,7 +200,17 @@ end
 
 gsub_file 'app/models/user.rb', /(#{Regexp.escape(line)})/mi do |match|
   "#{match}\n
-     has_many :authentications\n"
+     has_many :authentications\n
+     has_many :subscriptions
+     \n
+     def self.current
+       Thread.current[:user]
+     end
+    \n
+     def self.current=(user)
+       Thread.current[:user] = user
+     end
+     "
 end
 
 gsub_file 'app/models/user.rb', /:registerable/, ":registerable, :omniauthable"
@@ -262,7 +285,22 @@ if (stripe rescue false)
   resources :plans
 "
 
+  get @path + 'app/assets/javascripts/stripe/subscriptions.js.coffee', 'appapp/assets/javascripts/stripe/subscriptions.js.coffee'
+  get @path + 'config/initializers/stripe.rb', 'config/initializers/stripe.rb'
 
+
+end
+
+if (dj_added rescue false)
+  inject_into_file 'config/routes.rb', :after => 'Application.routes.draw do' do
+    <<-RUBY
+      mount DjMon::Engine => 'dj_mon'
+    RUBY
+  end
+
+  get @path + 'config/initializers/dj_mon.rb', 'config/initializers/dj_mon.rb'
+
+  generate "delayed_job:active_record"
 end
 
 
@@ -273,37 +311,37 @@ inject_into_file 'app/assets/javascripts/application.js', :before => '//= requir
 end
 
 
-inject_into_file 'config/environments/production.rb', :before => 'end' do
-  <<-RUBY
-  config.assets.initialize_on_precompile = false
-  config.assets.precompile += ['vendor/assets/**/*']
-  config.assets.precompile = []
-  config.assets.precompile << Proc.new { |path|
-    begin
-      if !(path =~ /\.(html)\z/) #compile all non-html files
-        full_path = Rails.application.assets.resolve(path).to_path
-        app_assets_path = Rails.root.join('app', 'assets').to_path
-        vendor_assets_path = Rails.root.join('vendor', 'assets').to_path
-        lib_assets_path = Rails.root.join('lib', 'assets').to_path
-
-        if !config.assets.precompile.include?(full_path) && (!path.starts_with? '_')
-          puts "\t" + full_path.slice(Rails.root.to_path.size..-1)
-          true
-        else
-          false
-        end
-      else
-        false
-      end
-    rescue
-      next
-    end
-  }
-
-
-
-  RUBY
-end
+#inject_into_file 'config/environments/production.rb', :before => 'end' do
+#  <<-RUBY
+#  config.assets.initialize_on_precompile = false
+#  config.assets.precompile += ['vendor/assets/**/*']
+#  config.assets.precompile = []
+#  config.assets.precompile << Proc.new { |path|
+#    begin
+#      if !(path =~ /\.(html)\z/) #compile all non-html files
+#        full_path = Rails.application.assets.resolve(path).to_path
+#        app_assets_path = Rails.root.join('app', 'assets').to_path
+#        vendor_assets_path = Rails.root.join('vendor', 'assets').to_path
+#        lib_assets_path = Rails.root.join('lib', 'assets').to_path
+#
+#        if !config.assets.precompile.include?(full_path) && (!path.starts_with? '_')
+#          puts "\t" + full_path.slice(Rails.root.to_path.size..-1)
+#          true
+#        else
+#          false
+#        end
+#      else
+#        false
+#      end
+#    rescue
+#      next
+#    end
+#  }
+#
+#
+#
+#  RUBY
+#end
 
 
 remove_file "app/views/layouts/application.html.erb"
@@ -315,8 +353,6 @@ get @path + 'app/views/layouts/application.html.erb', 'app/views/layouts/applica
 
 remove_file "config/initializers/client_side_validations.rb"
 get @path + 'config/initializers/client_side_validations.rb', 'config/initializers/client_side_validations.rb'
-
-
 
 
 rake 'db:migrate'

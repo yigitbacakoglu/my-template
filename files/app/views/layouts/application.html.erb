@@ -14,6 +14,9 @@
   <%= stylesheet_link_tag "application", :media => "all" %>
 
   <%= javascript_include_tag "application" %>
+
+  <%= tag :meta, :name => "stripe-key", :content => STRIPE_PUBLIC_KEY %>
+
 </head>
 <body>
 
