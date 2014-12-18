@@ -19,7 +19,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         flash[:notice] = "Signed in successfully."
         sign_in_and_redirect(:user, user)
       else #twitter user
-        session[:omniauth] = omniauth.except('extra')
+        session["devise.omniauth"] = omniauth.except('extra')
         flash[:notice] = "One more step left. Please enter your email"
         redirect_to new_user_registration_url
       end

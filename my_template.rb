@@ -8,7 +8,6 @@
 # http://github.com/rails/rails/blob/master/railties/lib/rails/generators/actions.rb
 
 @path = 'https://raw.github.com/yigitbacakoglu/my-template/master/files/'
-stripe = true
 ##### RECEIPES #####
 
 gem 'devise', "3.2.2"
@@ -58,6 +57,7 @@ if yes?('Would you like to use stripe billing? (yes/no)')
   gem 'stripe'
   gem 'stripe-rails'
   say('Add this code where you will use stripe modal.  <%= javascript_include_tag "//js.stripe.com/v1/", "stripe/subscriptions" %>')
+  stripe = true
 end
 
 
@@ -85,9 +85,11 @@ generate 'devise:install'
 generate 'devise:views'
 
 gsub_file 'config/application.rb', /:password/, ':password, :password_confirmation'
-generate 'devise user name:string'
-gsub_file 'app/models/user.rb', /:remember_me/, ':remember_me, :name'
+generate 'devise user username:string'
 
+get @path + 'app/models/user.rb', 'app/models/user.rb'
+
+#gsub_file 'app/models/user.rb', /:remember_me/, ':remember_me, :name'
 gsub_file 'config/initializers/devise.rb', /please-change-me-at-config-initializers-devise@example.com/, 'CHANGEME@example.com'
 
 # Omniauth settings
@@ -285,7 +287,7 @@ if (stripe rescue false)
   resources :plans
 "
 
-  get @path + 'app/assets/javascripts/stripe/subscriptions.js.coffee', 'appapp/assets/javascripts/stripe/subscriptions.js.coffee'
+  get @path + 'app/assets/javascripts/stripe/subscriptions.js.coffee', 'app/assets/javascripts/stripe/subscriptions.js.coffee'
   get @path + 'config/initializers/stripe.rb', 'config/initializers/stripe.rb'
 
 
